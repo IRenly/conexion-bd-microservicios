@@ -2,12 +2,10 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
+# Usamos la misma base de datos para todos
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:root@db:5432/asignacion_espacios")
 
-# Asegúrate de configurar la URL de tu BD PostgreSQL
-# Formato: postgresql://usuario:password@host:puerto/nombre_bd
-BASE_DE_DATOS_URL = os.getenv("DATABASE_URL", "postgresql://postgres:root@localhost:5432/usuarios")
-
-engine = create_engine(url=BASE_DE_DATOS_URL, echo=True)  # echo=True para ver las queries en consola (opcional)
+engine = create_engine(url=DATABASE_URL, echo=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
