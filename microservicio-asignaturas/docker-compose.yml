@@ -1,12 +1,12 @@
 services:
 
-  microservicio_programas:
+  microservicio:
     build: .
-    container_name: ms-programas
+    container_name: ms-asignaturas
     environment:
       - DATABASE_URL=postgresql://postgres:root@db:5432/asignacion_espacios
     ports:
-      - "8001:8001"
+      - "8002:8002"
     networks:
       - red_compartida
 
