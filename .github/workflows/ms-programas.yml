@@ -1,4 +1,4 @@
-yaml name: CI - Microservicio Programas
+name: CI - Microservicio Programas
 on:
   push:
     paths:
@@ -19,7 +19,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: microservicio-programas
+        working-directory: microservicio-programas # Directorio de trabajo por defecto para los 'run'
 
     steps:
       - name: Checkout del repositorio
@@ -30,10 +30,21 @@ jobs:
         with:
           python-version: 3.10
 
-      - name: Instalar dependencias
+      # --- PASO DE DEBUG: VERIFICAR ARCHIVOS ---
+      - name: Listar archivos en el directorio de trabajo actual
+        run: |
+          echo "Directorio actual:"
+          pwd
+          echo "Contenido del directorio actual:"
+          ls -la
+          echo "Contenido recursivo desde la raíz del repositorio:"
+          ls -R /home/runner/work/${{ github.repository }}/${{ github.repository }}
+      # --- FIN PASO DE DEBUG ---
+
+      - name: Instalar dependencias # Este es el paso que falla
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r requirements.txt # Esto busca requirements.txt en el working-directory
 
       - name: Ejecutar tests
         run: pytest --maxfail=1 --disable-warnings -v
