@@ -1,4 +1,4 @@
-yaml name: CI - Microservicio Programas
+name: CI - Microservicio Programas
 on:
   push:
     paths:
