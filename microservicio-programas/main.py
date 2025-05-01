@@ -1,18 +1,21 @@
 from fastapi import FastAPI
-from routes import programa_routes  
+from routes import programa_routes
 from contextlib import asynccontextmanager
 from database import Base, engine
-Base.metadata.create_all(bind=engine)
+import sys
 
+# Detectamos si estamos en modo test
+IS_TEST = any(arg.startswith("pytest") for arg in sys.argv)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Código de startup: aquí creamos las tablas
-    Base.metadata.create_all(bind=engine)
+    if not IS_TEST:
+        # Solo crear las tablas si no estamos en modo test
+        Base.metadata.create_all(bind=engine)
     yield
-    # Código de apagado: aquí eliminamos las tablas
+    # (Aquí podrías cerrar conexiones u otros recursos si hiciera falta)
 
-app = FastAPI(lifespan=lifespan, title="Microservicio de Programas academicos")
+app = FastAPI(lifespan=lifespan, title="Microservicio de Programas académicos")
 
 # Incluir las rutas
 app.include_router(programa_routes.router)
